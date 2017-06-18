@@ -1,3 +1,4 @@
-/**
- * Created by sonyahon on 13/06/2017.
- */
+export default (state = null, action) => {
+    let config = Object.assign({}, state);
+    return config;
+}
