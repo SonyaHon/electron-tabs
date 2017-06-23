@@ -1,3 +1,7 @@
 node_modules
 out
 src/server/bundle.js
+.DS_Store
+.idea/
+app_dev_src/actions/
+

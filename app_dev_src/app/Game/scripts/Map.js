@@ -3,44 +3,53 @@ import Tile from './Tile';
 
 class Map {
     constructor(map_template) {
-         this.width = map_template.width;
-         this.height = map_template.height;
+        this.width = map_template.width;
+        this.height = map_template.height;
 
-         this.Tiles = [];
+        this.Tiles = [];
 
-         this.velocity = {
-             x: 0,
-             y: 0
-         };
+        this.teamOne = {
+            units: []
+        };
+        this.teamTwo = {
+            units: []
+        };
+        this.gameObjects = [];
+        this.units = {};
 
-         this.offset = {
-             x: 0,
-             y: 0
-         };
+        this.velocity = {
+            x: 0,
+            y: 0
+        };
 
-         for(let y = 0; y < this.height; y++) {
-             this.Tiles.push([]);
-             for(let x = 0; x < this.width; x++) {
-                 let charCode = map_template.map[y][x];
-                 let filename = map_template.legend[map_template.map[y][x]];
+        this.offset = {
+            x: 0,
+            y: 0
+        };
 
-                 if(filename !== 'tile_void') {
-                     let tile;
-                     if(charCode[0] === '_')
-                         tile = new Tile(PIXI.loader.resources[filename].texture);
-                     else if(charCode[0] === '$')
-                         tile = new Tile(PIXI.loader.resources[filename].texture, {
-                             walkable: false
-                         });
-                     tile.x = x * tile.width;
-                     tile.y = y * tile.height;
-                     this.Tiles[y].push(tile);
-                 }
-                 else {
-                     this.Tiles[y].push(null);
-                 }
-             }
-         }
+        for(let y = 0; y < this.height; y++) {
+            this.Tiles.push([]);
+            for(let x = 0; x < this.width; x++) {
+                let charCode = map_template.map[y][x];
+                let filename = map_template.legend[map_template.map[y][x]];
+
+                if(filename !== 'tile_void') {
+                    let tile;
+                    if(charCode[0] === '_')
+                        tile = new Tile(PIXI.loader.resources[filename].texture);
+                    else if(charCode[0] === '$')
+                        tile = new Tile(PIXI.loader.resources[filename].texture, {
+                            walkable: false
+                        });
+                    tile.x = x * tile.width;
+                    tile.y = y * tile.height;
+                    this.Tiles[y].push(tile);
+                }
+                else {
+                    this.Tiles[y].push(null);
+                }
+            }
+        }
 
     }
 
@@ -60,11 +69,10 @@ class Map {
         }
         this.offset.x += this.velocity.x;
         this.offset.y += this.velocity.y;
-
-        return this.velocity;
     }
 
     addMapToStage(stage) {
+        this._PARENT_STAGE = stage;
         for(let y = 0; y < this.height; y++) {
             for(let x = 0; x < this.width; x++) {
                 if(this.Tiles[y][x] !== null)
@@ -91,6 +99,46 @@ class Map {
             return this.Tiles[y][x];
         else
             return null;
+    }
+
+    addGameObject(go) {
+        this.gameObjects.push(go);
+        this._PARENT_STAGE.addChild(go);
+    }
+
+    addUnit(team, name, unit) {
+        if(team === 'one') {
+            this.teamOne.units.push(unit);
+            unit.setTeam('one');
+        }
+        else if(team === 'two') {
+            this.teamTwo.units.push(unit);
+            unit.setTeam('two');
+        }
+        else if('neutral') {
+            this.units[name] = unit;
+            unit.setTeam('neutral');
+        }
+        else {
+            throw new Error("There is no such a team");
+        }
+        this._PARENT_STAGE.addChild(unit);
+    }
+
+    update() {
+        this.move();
+        for(let key in this.gameObjects) {
+            this.gameObjects[key].update();
+        }
+        for(let key in this.units) {
+            this.units[key].update();
+        }
+        for(let key in this.teamOne.units) {
+            this.teamOne.units[key].update();
+        }
+        for(let key in this.teamTwo.units) {
+            this.teamTwo.units[key].update();
+        }
     }
 }
 
