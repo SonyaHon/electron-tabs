@@ -4,12 +4,7 @@ class Tile extends PIXI.Sprite {
     constructor(texture, props) {
         super(texture);
 
-        if(props) {
-            this.walkable = props['walkable'] || true;
-        }
-        else {
-            this.walkable = true;
-        }
+        this.walkable = props['walkable'];
     }
 
     translate(vector) {

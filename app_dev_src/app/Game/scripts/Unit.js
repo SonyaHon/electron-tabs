@@ -11,6 +11,7 @@ class Unit extends GameObject {
 
             this.x = props['x'] || 0;
             this.y = props['y'] || 0;
+            this.dmg = props['damage'] || 1;
         }
         else {
             this.maxHp = 100;
@@ -19,6 +20,7 @@ class Unit extends GameObject {
             this.speed = 0.01;
             this.x = 0;
             this.y = 0;
+            this.dmg = 1;
         }
 
         this.team = null;

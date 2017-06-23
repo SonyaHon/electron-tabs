@@ -14,14 +14,12 @@ class SampleUnit extends Unit {
 
         this.selfEventEmitter.on('attacked', function (dmg) {
             self.decreaseHp(dmg);
-            console.log('It herts! My health is', self.currentHp + '/' + self.maxHp);
         })
     }
 
     update(){
         super.update();
         this.findTarget();
-        console.log(this.target.unitDist);
 
         if(this.target.unitDist <= (this.attackRadius * 64)) {
             this.attack(this.target.unit);
@@ -33,7 +31,7 @@ class SampleUnit extends Unit {
 
     attack(target) {
         let dmg = this.dmg;
-        target.selfEventEmitter.emit('attacked', );
+        target.selfEventEmitter.emit('attacked', dmg);
     }
 
     moveTo(target) {

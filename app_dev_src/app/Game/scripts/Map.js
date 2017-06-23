@@ -7,6 +7,7 @@ class Map {
         this.height = map_template.height;
 
         this.Tiles = [];
+        this.pathMesh = [];
 
         this.teamOne = {
             units: []
@@ -36,17 +37,33 @@ class Map {
                 if(filename !== 'tile_void') {
                     let tile;
                     if(charCode[0] === '_')
-                        tile = new Tile(PIXI.loader.resources[filename].texture);
-                    else if(charCode[0] === '$')
+                        tile = new Tile(PIXI.loader.resources[filename].texture, {
+                            walkable: true
+                        });
+                    else if(charCode[0] === '$') {
                         tile = new Tile(PIXI.loader.resources[filename].texture, {
                             walkable: false
                         });
+                    }
+
                     tile.x = x * tile.width;
                     tile.y = y * tile.height;
                     this.Tiles[y].push(tile);
                 }
                 else {
                     this.Tiles[y].push(null);
+                }
+            }
+        }
+
+
+        for(let y = 0; y < this.Tiles.length * 4; y++) {
+            this.pathMesh.push([]);
+            for(let x = 0; x < this.Tiles[Math.floor(y / 4)].length * 4; x++) {
+                let tile = this.Tiles[Math.floor(y / 4)][Math.floor(x / 4)];
+                // This tile is accepted for path mesh
+                if(tile !== null && tile.walkable === true) {
+                    
                 }
             }
         }
