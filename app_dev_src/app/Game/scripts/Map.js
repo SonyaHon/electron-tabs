@@ -57,16 +57,54 @@ class Map {
         }
 
 
-        for(let y = 0; y < this.Tiles.length * 4; y++) {
+        /*for(let y = 0; y < this.Tiles.length * 4; y++) {
             this.pathMesh.push([]);
             for(let x = 0; x < this.Tiles[Math.floor(y / 4)].length * 4; x++) {
                 let tile = this.Tiles[Math.floor(y / 4)][Math.floor(x / 4)];
-                // This tile is accepted for path mesh
                 if(tile !== null && tile.walkable === true) {
-                    
+
+                }
+            }
+        }*/
+
+
+        // Added all posible points with duplicats
+        for(let y = 0; y < this.Tiles.length; y++) {
+            for(let x = 0; x < this.Tiles[y].length; x++) {
+                let tile = this.Tiles[y][x];
+                if(tile !== null && tile.walkable === true) {
+                    // This tile should be added to the tiles grid
+                    let p1 = {x: tile.x, y: tile.y};
+                    let p2 = {x: tile.x + 32, y: tile.y};
+                    let p3 = {x: tile.x + 64, y: tile.y};
+
+                    let p4 = {x: tile.x, y: tile.y + 32};
+                    let p5 = {x: tile.x + 32, y: tile.y + 32};
+                    let p6 = {x: tile.x + 64, y: tile.y + 32};
+
+                    let p7 = {x: tile.x, y: tile.y +64};
+                    let p8 = {x: tile.x + 32, y: tile.y +64};
+                    let p9 = {x: tile.x + 64, y: tile.y +64};
+
+                    this.pathMesh.push(p1);
+                    this.pathMesh.push(p2);
+                    this.pathMesh.push(p3);
+                    this.pathMesh.push(p4);
+                    this.pathMesh.push(p5);
+                    this.pathMesh.push(p6);
+                    this.pathMesh.push(p7);
+                    this.pathMesh.push(p8);
+                    this.pathMesh.push(p9);
                 }
             }
         }
+
+        // remove duplicats
+        this.pathMesh = this.pathMesh.filter(function(item, pos, self) {
+            return self.indexOf(item) === pos;
+        });
+
+        console.log(this.pathMesh);
 
     }
 
