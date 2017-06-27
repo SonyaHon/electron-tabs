@@ -38,11 +38,8 @@ class SampleUnit extends Unit {
     }
 
     moveTo(target) {
-        /*
-        let vec = {x: target.x - this.x, y: target.y - this.y};
-        this.translate(vec);
-        */
-        this.paths.findPath(this.x, this.y, target.x, target.y);
+       let path = this.paths.findPath({x: this.x, y: this.y}, {x: target.x, y: target.y});
+       console.log(path);
     }
 }
 

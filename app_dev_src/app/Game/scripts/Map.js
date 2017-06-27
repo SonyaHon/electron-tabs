@@ -1,31 +1,6 @@
 import * as PIXI from 'pixi.js';
 import Tile from './Tile';
-
-class PathMesh {
-    constructor(mesh) {
-        this.mesh = mesh;
-    }
-
-    getSpot(x, y) {
-        let X = Math.floor(x / 32);
-        let Y = Math.floor(y / 32);
-        return this.mesh[y][x];
-    }
-
-    getNeightboors(x, y) {
-        let X = Math.floor(x / 32);
-        let Y = Math.floor(y / 32);
-        let neighboors = [];
-        for(let i = X - 1; i < X + 3; i++) {
-            for(let j = Y - 1; j < Y + 3; j++) {
-                if(this.mesh[i][j]) {
-                    neighboors.push(this.mesh[i][j]);
-                }
-            }
-        }
-        return neighboors;
-    }
-}
+import PathMesh from './PathMesh';
 
 class Map {
     constructor(map_template) {
