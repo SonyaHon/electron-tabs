@@ -1,6 +1,32 @@
 import * as PIXI from 'pixi.js';
 import Tile from './Tile';
 
+class PathMesh {
+    constructor(mesh) {
+        this.mesh = mesh;
+    }
+
+    getSpot(x, y) {
+        let X = Math.floor(x / 32);
+        let Y = Math.floor(y / 32);
+        return this.mesh[y][x];
+    }
+
+    getNeightboors(x, y) {
+        let X = Math.floor(x / 32);
+        let Y = Math.floor(y / 32);
+        let neighboors = [];
+        for(let i = X - 1; i < X + 3; i++) {
+            for(let j = Y - 1; j < Y + 3; j++) {
+                if(this.mesh[i][j]) {
+                    neighboors.push(this.mesh[i][j]);
+                }
+            }
+        }
+        return neighboors;
+    }
+}
+
 class Map {
     constructor(map_template) {
         this.width = map_template.width;
@@ -56,35 +82,23 @@ class Map {
             }
         }
 
-
-        /*for(let y = 0; y < this.Tiles.length * 4; y++) {
-            this.pathMesh.push([]);
-            for(let x = 0; x < this.Tiles[Math.floor(y / 4)].length * 4; x++) {
-                let tile = this.Tiles[Math.floor(y / 4)][Math.floor(x / 4)];
-                if(tile !== null && tile.walkable === true) {
-
-                }
-            }
-        }*/
-
-
         // Added all posible points with duplicats
         for(let y = 0; y < this.Tiles.length; y++) {
             for(let x = 0; x < this.Tiles[y].length; x++) {
                 let tile = this.Tiles[y][x];
                 if(tile !== null && tile.walkable === true) {
                     // This tile should be added to the tiles grid
-                    let p1 = {x: tile.x, y: tile.y};
-                    let p2 = {x: tile.x + 32, y: tile.y};
-                    let p3 = {x: tile.x + 64, y: tile.y};
+                    let p1 = {x: tile.x, y: tile.y, f: 0, g: 0, h: 0};
+                    let p2 = {x: tile.x + 32, y: tile.y, f: 0, g: 0, h: 0};
+                    let p3 = {x: tile.x + 64, y: tile.y, f: 0, g: 0, h: 0};
 
-                    let p4 = {x: tile.x, y: tile.y + 32};
-                    let p5 = {x: tile.x + 32, y: tile.y + 32};
-                    let p6 = {x: tile.x + 64, y: tile.y + 32};
+                    let p4 = {x: tile.x, y: tile.y + 32, f: 0, g: 0, h: 0};
+                    let p5 = {x: tile.x + 32, y: tile.y + 32, f: 0, g: 0, h: 0};
+                    let p6 = {x: tile.x + 64, y: tile.y + 32, f: 0, g: 0, h: 0};
 
-                    let p7 = {x: tile.x, y: tile.y +64};
-                    let p8 = {x: tile.x + 32, y: tile.y +64};
-                    let p9 = {x: tile.x + 64, y: tile.y +64};
+                    let p7 = {x: tile.x, y: tile.y +64, f: 0, g: 0, h: 0};
+                    let p8 = {x: tile.x + 32, y: tile.y +64, f: 0, g: 0, h: 0};
+                    let p9 = {x: tile.x + 64, y: tile.y +64, f: 0, g: 0, h: 0};
 
                     this.pathMesh.push(p1);
                     this.pathMesh.push(p2);
@@ -132,7 +146,7 @@ class Map {
                 }
             }
         }
-        this.pathMesh = pathMeshRefind;
+        this.pathMesh = new PathMesh(pathMeshRefind);
     }
 
     setVelocityX(x) {

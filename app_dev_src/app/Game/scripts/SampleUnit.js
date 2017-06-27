@@ -1,4 +1,5 @@
 import Unit from './Unit.js';
+import AStar from './A*.js';
 
 class SampleUnit extends Unit {
     constructor(texture, eventEmitter, map, props) {
@@ -14,7 +15,9 @@ class SampleUnit extends Unit {
 
         this.selfEventEmitter.on('attacked', function (dmg) {
             self.decreaseHp(dmg);
-        })
+        });
+
+        this.paths = new AStar(this.map.pathMesh);
     }
 
     update(){
@@ -35,8 +38,11 @@ class SampleUnit extends Unit {
     }
 
     moveTo(target) {
+        /*
         let vec = {x: target.x - this.x, y: target.y - this.y};
         this.translate(vec);
+        */
+        this.paths.findPath(this.x, this.y, target.x, target.y);
     }
 }
 

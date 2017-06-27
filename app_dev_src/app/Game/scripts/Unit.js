@@ -26,20 +26,6 @@ class Unit extends GameObject {
         this.team = null;
     }
 
-    getNeighboorTiles(X, Y) {
-        let neighboors = [];
-        X -= this.map.offset.x;
-        Y -= this.map.offset.y;
-        for(let x = -64; x <= 64; x += 64) {
-            for(let y = -64; y <= 64; y += 64) {
-                if((x !== 0 || y !== 0) && this.map.getTileAtCoords(X + x, Y + y) !== null) {
-                    neighboors.push(this.map.getTileAtCoords(X + x, Y + y));
-                }
-            }
-        }
-        return neighboors;
-    }
-    // TODO Change it to moveToPoint() with A* or directly (for flying units?)
     translate(vector) {
         this.x += vector.x * this.speed;
         this.y += vector.y * this.speed;
