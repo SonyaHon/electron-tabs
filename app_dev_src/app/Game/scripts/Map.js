@@ -101,11 +101,38 @@ class Map {
 
         // remove duplicats
         this.pathMesh = this.pathMesh.filter(function(item, pos, self) {
-            return self.indexOf(item) === pos;
+            for(let i = 0; i <= pos; i++) {
+                if(self[i].x === item.x && self[i].y === item.y) {
+                    if(pos === i) return item;
+                    break;
+                }
+            }
         });
 
-        console.log(this.pathMesh);
-
+        // find max x and max y points of the mesh
+        let maxX = 0, maxY = 0;
+        for(let i = 0; i < this.pathMesh.length; i++) {
+            if(this.pathMesh[i].x > maxX) {
+                maxX = this.pathMesh[i].x;
+            }
+            if(this.pathMesh[i].y > maxY) {
+                maxY = this.pathMesh[i].y;
+            }
+        }
+        // sort points
+        let pathMeshRefind = [];
+        for(let y = this.pathMesh[0].y; y <= maxY; y += 32) {
+            pathMeshRefind.push([]);
+            for(let x = this.pathMesh[0].x; x <= maxX; x += 32) {
+                for(let i = 0; i < this.pathMesh.length; i++) {
+                    if(this.pathMesh[i].x === x && this.pathMesh[i].y === y){
+                        pathMeshRefind[pathMeshRefind.length-1].push(this.pathMesh[i]);
+                        break;
+                    }
+                }
+            }
+        }
+        this.pathMesh = pathMeshRefind;
     }
 
     setVelocityX(x) {
